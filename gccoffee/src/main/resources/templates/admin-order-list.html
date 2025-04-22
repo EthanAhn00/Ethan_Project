@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 목록</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>관리자 주문 목록</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>주문번호</th>
+    <th>이메일</th>
+    <th>주문일자</th>
+    <th>상태</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.id}"></td>
+    <td th:text="${order.email}"></td>
+    <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
+    <td th:text="${order.status}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,142 @@
+body {
+  font-family: 'Pretendard', sans-serif;
+  background-color: #fcfaf3;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: #1a1a1a;
+  padding: 16px 24px;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.auth-buttons a {
+  margin-left: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.main-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.main-container h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.view-button {
+  display: inline-block;
+  margin-bottom: 40px;
+  background: #1a1a1a;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 16px;
+  text-align: center;
+  width: 260px;
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.product-info h2 {
+  margin: 12px 0 4px;
+  font-size: 1.1rem;
+}
+
+.product-info p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 24px;
+}
+
+.login-container form input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.login-container form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.login-container .admin-login-link,
+.login-container .register-link {
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+.login-container a {
+  color: #555;
+  text-decoration: none;
+}
+
+.footer {
+  text-align: center;
+  margin: 40px 0;
+  color: #333;
+}

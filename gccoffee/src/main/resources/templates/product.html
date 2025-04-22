@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Grids & Circle - 상품 목록</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #eee; }
+    .card { margin: auto; max-width: 1100px; border-radius: 1rem; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .product-image { width: 3.5rem; }
+    .product-card li { margin-top: 1rem; }
+    .btn-cart { font-size: 0.9rem; }
+  </style>
+</head>
+<body class="container-fluid">
+
+<div class="row justify-content-center my-4">
+  <h1 class="text-center"><a href="/static" style="text-decoration: none; color: black;">Grids & Circle</a></h1>
+</div>
+
+<div class="card p-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h5><strong>상품 목록</strong></h5>
+      <ul class="list-group product-card">
+        <li class="list-group-item d-flex align-items-center" th:each="menu : ${menus}">
+          <div class="col-2">
+            <img class="img-fluid product-image" th:src="@{'/images/' + ${menu.imageUrl}}" alt="menu image">
+          </div>
+          <div class="col">
+            <div class="text-muted" th:text="${menu.description}">커피 설명</div>
+            <div th:text="${menu.name}">상품 이름</div>
+          </div>
+          <div class="col text-center price" th:text="${menu.price} + '원'">가격</div>
+          <div class="col text-end">
+            <form action="/cart/add" method="post" class="d-inline-block">
+              <input type="hidden" name="menuId" th:value="${menu.id}" />
+              <input type="hidden" name="name" th:value="${menu.name}" />
+              <input type="hidden" name="price" th:value="${menu.price}" />
+              <input type="hidden" name="quantity" value="1" />
+              <button type="submit" class="btn btn-outline-dark btn-cart">추가</button>
+            </form>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

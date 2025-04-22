@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Grids & Circle Coffee</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <a href="/" class="logo">Grids & Circle</a>
+    </div>
+    <div class="auth-buttons">
+      <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <span th:text="'안녕하세요, ' + ${#authentication.name} + '님!'"></span>
+        <a th:href="@{/logout}">Logout</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/menu}">메뉴 추가</a>
+      </div>
+      <div th:unless="${#authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/register.html}">Register</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="main-container">
+    <h2>Welcome to Grids & Circle Coffee!</h2>
+    <a class="view-button" th:href="@{/product}">View Product</a>
+  </section>
+
+  <div id="productList" class="product-list"></div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 Grids & Circle Coffee</p>
+</footer>
+
+<script>
+  async function loadMenus() {
+    try {
+      const response = await fetch('/api/menus');
+      const menus = await response.json();
+
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+
+      menus.forEach(menu => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
+            <img src="${menu.imageUrl}" alt="${menu.name}">
+            <div class="product-info">
+              <h2>${menu.name}</h2>
+              <p>${menu.description || '⠀'}</p>
+              <p>${menu.price.toLocaleString()}원</p>
+            </div>
+          `;
+        productList.appendChild(card);
+      });
+    } catch (e) {
+      console.error("메뉴 불러오기 실패:", e);
+    }
+  }
+
+  window.onload = loadMenus;
+</script>
+</body>
+</html>

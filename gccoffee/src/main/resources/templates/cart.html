@@ -1,0 +1,81 @@
+<!-- ... 생략된 head 및 style은 이전 코드와 동일 ... -->
+
+<script>
+  const isLoggedIn = false;
+
+  let cart = [
+    { name: "Colombia Nariño", price: 5000, quantity: 2, image: "/images/coffee1.png" },
+    { name: "Brazil Caparaó", price: 4800, quantity: 1, image: "/images/coffee2.png" }
+  ];
+
+  function renderCart() {
+    const cartItemsEl = document.getElementById("cart-items");
+    const totalEl = document.getElementById("cart-total");
+    const guestInfo = document.getElementById("guest-info");
+
+    cartItemsEl.innerHTML = '';
+    let total = 0;
+
+    if (cart.length === 0) {
+      cartItemsEl.innerHTML = '<p style="text-align:center; margin-top:20px;">🧺 장바구니가 비었습니다.</p>';
+      totalEl.innerText = "총 금액: 0원";
+      guestInfo.style.display = "none";
+      return;
+    }
+
+    cart.forEach((item, index) => {
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <img src="${item.image}" alt="${item.name}">
+        <div class="cart-info">
+          <strong>${item.name}</strong><br>
+          <div class="quantity-control">
+            <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">➖</button>
+            ${item.quantity}
+            <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">➕</button>
+          </div>
+        </div>
+        <div>${itemTotal.toLocaleString()}원</div>
+        <div>
+          <button class="quantity-btn" onclick="removeItem(${index})">🗑️</button>
+        </div>
+      `;
+      cartItemsEl.appendChild(div);
+    });
+
+    totalEl.innerText = `총 금액: ${total.toLocaleString()}원`;
+    guestInfo.style.display = isLoggedIn ? "none" : "block";
+  }
+
+  function changeQuantity(index, delta) {
+    cart[index].quantity += delta;
+    if (cart[index].quantity < 1) cart[index].quantity = 1;
+    renderCart();
+  }
+
+  function removeItem(index) {
+    if (confirm("정말 이 상품을 삭제하시겠어요?")) {
+      cart.splice(index, 1); // 인덱스로 제거
+      renderCart();
+    }
+  }
+
+  function submitOrder() {
+    if (!isLoggedIn) {
+      const email = document.getElementById("guestEmail").value;
+      const address = document.getElementById("guestAddress").value;
+      const postCode = document.getElementById("guestPostCode").value;
+      if (!email || !address || !postCode) {
+        alert("비회원은 이메일, 주소, 우편번호를 모두 입력해야 합니다.");
+        return;
+      }
+    }
+    alert("주문이 완료되었습니다.");
+  }
+
+  renderCart();
+</script>

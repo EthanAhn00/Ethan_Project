@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grids & Circle - Admin Menu</title>
+  <style>
+    body {
+      background-color: #fefcf8;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"], input[type="number"], input[type="file"] {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 200px;
+    }
+
+    button {
+      padding: 0.6rem 1.5rem;
+      background-color: #1c1c1c;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    .menu-list {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .menu-card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      text-align: center;
+      width: 200px;
+    }
+
+    .menu-card img {
+      height: 120px;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-card h3 {
+      margin: 0.5rem 0;
+    }
+
+    .menu-card button {
+      margin-top: 0.5rem;
+      background-color: crimson;
+    }
+
+    .menu-card button:hover {
+      background-color: darkred;
+    }
+  </style>
+  <script>
+    // 🔐 관리자 권한 검사
+    if (localStorage.getItem("role") !== "admin") {
+      alert("접근 권한이 없습니다. 관리자 로그인이 필요합니다.");
+      window.location.href = "adminlogin.html";
+    }
+  </script>
+</head>
+<body>
+<h1>☕ Grids & Circle - 관리자 메뉴 등록</h1>
+
+<form id="menuForm">
+  <input type="text" id="name" placeholder="메뉴 이름" required />
+  <input type="text" id="description" placeholder="설명" required />
+  <input type="number" id="price" placeholder="가격" required />
+  <input type="file" id="image" accept="image/*" required />
+  <button type="submit">등록</button>
+</form>
+
+<div class="menu-list" id="menuList"></div>
+
+<script>
+  async function loadMenus() {
+    const res = await fetch("/api/menus");
+    const menus = await res.json();
+    const list = document.getElementById("menuList");
+    list.innerHTML = "";
+    menus.forEach(menu => {
+      const div = document.createElement("div");
+      div.className = "menu-card";
+      div.innerHTML = `
+          <img src="${menu.imageUrl}" alt="${menu.name}" />
+          <h3>${menu.name}</h3>
+          <p>${menu.description}</p>
+          <p>${menu.price}원</p>
+          <button onclick="deleteMenu(${menu.id})">삭제</button>
+        `;
+      list.appendChild(div);
+    });
+  }
+
+  async function deleteMenu(id) {
+    await fetch(`/api/menus/${id}`, { method: "DELETE" });
+    loadMenus();
+  }
+
+  document.getElementById("menuForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData();
+    const menu = {
+      name: form.name.value,
+      description: form.description.value,
+      price: Number(form.price.value)
+    };
+    formData.append("menu", new Blob([JSON.stringify(menu)], { type: "application/json" }));
+    formData.append("image", form.image.files[0]);
+    await fetch("/api/menus", {
+      method: "POST",
+      body: formData
+    });
+    form.reset();
+    loadMenus();
+  });
+
+  window.onload = loadMenus;
+</script>
+</body>
+</html>

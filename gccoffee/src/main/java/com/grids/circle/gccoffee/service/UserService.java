@@ -5,6 +5,7 @@ import com.grids.circle.gccoffee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.Collections;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,12 +30,14 @@ public class UserService implements UserDetailsService {
     }
 
     public User register(User user) {
-        // 비밀번호 암호화나 중복 확인 등의 로직은 여기에 넣을 수 있음
 
         // 기본 role 설정
         if (user.getRole() == null) {
-            user.setRole("USER");  // 또는 Role.USER.name() (enum이면)
+            user.setRole("USER");
         }
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
 
         return userRepository.save(user);
     }

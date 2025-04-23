@@ -17,14 +17,14 @@ public class UserController {
 
     private final UserService userService;
 
-    // 🔐 회원가입 API
+    // 회원가입 API
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         User registeredUser = userService.register(user);
         return ResponseEntity.ok(registeredUser);
     }
 
-    // 🔐 로그인은 추후 세션/토큰 기반으로 확장 예정
+    // 로그인은 추후 세션/토큰 기반으로 확장 예정
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
